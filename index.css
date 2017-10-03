@@ -1,0 +1,22 @@
+@import "suitcss";
+
+@custom-media --sm-viewport (min-width: 320px) and (max-width: 640px);
+@custom-media --md-viewport (min-width: 640px) and (max-width: 960px);
+@custom-media --lg-viewport (min-width: 960px);
+
+:root {
+  --Grid-gutter-size: 25px;
+  --Excerpt-padding: 20px;
+  --Excerpt-highlight-color: orange;
+}
+
+.Excerpt {
+    padding: var(--Excerpt-padding);
+  }
+  
+  .Excerpt-thumbnail {
+    border: 2px solid var(--Excerpt-highlight-color);
+    border-radius: 3px;
+    margin-right: 10px;
+  }
+  

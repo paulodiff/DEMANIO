@@ -1,0 +1,52 @@
+{
+  "name": "demanio",
+  "version": "1.0.0",
+  "description": "Gestione Demanio Marittimo",
+  "main": "demanio.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildcss": "suitcss index.css build/build.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.5.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "connect-multiparty": "^2.0.0",
+    "cookie-parser": "^1.4.3",
+    "crypto": "^1.0.1",
+    "csurf": "^1.9.0",
+    "csvtojson": "^1.1.8",
+    "ejs": "^2.5.7",
+    "express": "^4.15.5",
+    "express-ntlm": "^2.2.4",
+    "express-session": "^1.15.6",
+    "frameguard": "^3.0.0",
+    "fs-extra": "^4.0.2",
+    "helmet": "^3.8.1",
+    "jsonwebtoken": "^8.0.1",
+    "jwt-simple": "^0.5.1",
+    "ldapauth-fork": "^4.0.2",
+    "log4js": "^2.3.4",
+    "md5-file": "^3.2.3",
+    "moment": "^2.18.1",
+    "mongoose": "^4.11.13",
+    "morgan": "^1.9.0",
+    "mysql2": "^1.4.2",
+    "node-csvjsonlite": "^1.1.4",
+    "node-uuid": "^1.4.8",
+    "path": "^0.12.7",
+    "querystring": "^0.2.0",
+    "request": "^2.83.0",
+    "sequelize": "^4.11.1",
+    "spark-md5": "^3.0.0",
+    "suitcss": "^3.0.0",
+    "suitcss-components-grid": "^3.0.3",
+    "suitcss-utils-size": "^2.0.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "suitcss-preprocessor": "^4.0.0"
+  }
+}
