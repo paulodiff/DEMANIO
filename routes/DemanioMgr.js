@@ -18,11 +18,14 @@ var ENV_PROT   = require('../config/configPROTOCOLLO.js'); // load user configur
 var utilityModule  = require('../models/utilityModule.js'); // load configuration data
 var log = require('../models/loggerModule.js');
 var async = require('async');
+var async2 = require('async');
 var databaseModule = require("../models/databaseModule.js");
 var emitterBus = require("../models/emitterModule.js");
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var multiparty = require('multiparty');
+var crypto = require('crypto');
+
 
 
 module.exports = function(){
@@ -163,7 +166,7 @@ router.post('/updata/:sseId',  function(req, res) {
         console.log(req.params);
     }
 
-    emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'insert', itemN: 100, txt: 'Start operations'} });
+    emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'insert', itemN: 100, txt: 'Start operations ..'} });
     
     // emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: 'ooook'});
 
@@ -180,8 +183,9 @@ router.post('/updata/:sseId',  function(req, res) {
     async.series([       
                     function(callback){
                         log.log2console('STEP-START:');
-                        // emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: 'ASYNC1'});
-                        callback(null, 'STEP-START ok');
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'insert', itemN: 102, txt: 'Start operations 2..'} });
+                        // callback(null, 'STEP-START ok');
+                        setTimeout( function () {callback(null, 'STEP-START ok')},1000);
                     },
                     
                     function(callback) {
@@ -211,7 +215,7 @@ router.post('/updata/:sseId',  function(req, res) {
                     // ##### Input sanitizer & validator------------------------------------------------------------------------
                     function(callback){
                         log.log2console('STEP-SANYTIZE-INPUT:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 300, txt: 'Form sanit '}});
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 300, txt: 'Form sanit ... '}});
             
                         if (sanitizeInput(objFieldList, objFieldSanitized, reqId)){
                             log.log2console('sanitizeInput: ok');
@@ -254,12 +258,21 @@ router.post('/updata/:sseId',  function(req, res) {
                     },
 
                     function(callback){
-                        log.log2console('LOAD CSV e TO JSON + HASH:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 700, txt: 'Inserimmetni'}});
+                        log.log2console('STEP-TIMEOUT:');
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 600, txt: 'Timeout'}});
+                        // callback(null, 'STEP-START ok');
+                        setTimeout( function () {callback(null, 'STEP-START ok')},1000);
+                    },
 
+
+                    function(callback){
+                        log.log2console('LOAD CSV e TO JSON + HASH + DB:');
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 700, txt: 'LOAD CSV e TO JSON + HASH + DB'}});
                        
                         var csv  = require('node-csvjsonlite');
                         var csvFilePath = objFieldSanitized.files[0].destFile;
+
+                        // var hmac = crypto.createHmac('sha256', 'DEMANIO');
 
                         log.log2console(csvFilePath);         
                         
@@ -269,9 +282,13 @@ router.post('/updata/:sseId',  function(req, res) {
                         .split('\n')
                         .filter(Boolean);
 
-                        console.log(lines.length);
+                        console.log('N.LINEE DEL FILE DA ELABORARE:',lines.length);
 
-                        for (i = 0; i < 10; i++){
+                        var headerLine = [];
+                        var bulkObjArray = []
+                        var bulkObj = {};
+
+                        for (i = 0; i < lines.length; i++){
                             var line = lines[i];
                             line = line.replace(/(\r\n|\n|\r)/gm,"");
                             line = line.toUpperCase();
@@ -281,41 +298,88 @@ router.post('/updata/:sseId',  function(req, res) {
                             for ( j = 0; j < aLine.length; j ++ ){
                                 aLine[j] = aLine[j].trim();
                                 aLine[j] = aLine[j].replace(/ /g,"_");
-
                             }
 
-                            console.log(aLine);
-                           
+                            if ( i === 0 ) {
+                                headerLine = aLine;
+                                console.log('Header line:', headerLine);
+                            }
 
+                            bulkObj = {};
+                            if ( i > 0) {
+                                for ( j = 0; j < aLine.length; j ++ ){
+                                    bulkObj[headerLine[j]] = aLine[j];
+                                }
+                                
+                                // hmac.update(aLine.join());
+                                // bulkObj.HASH = hmac.digest('hex');
+                                bulkObj.HASH = crypto.createHash('sha256').update(aLine.join()).digest('hex');
+                                bulkObj.TS = reqId;
+                                bulkObj.FILE_NAME_IMPORT = csvFilePath;
+                                
+                                console.log(bulkObj);
 
+                                bulkObjArray.push(bulkObj);
+                            }
                         }
 
-                        /*
-                        csv
-                        .convert(csvFilePath)
-                        .then(function(successData){
-                            console.log('This shouldn\'t show');
-                            log.log2console('CSV OK'); 
-                            log.log2console(successData); 
-                            callback(null, 'CSV OK salvataggio dati protocollo nella cartella ... ok');
-                        }, function(errorReason){
-                            console.log('CSV ERROR')
-                            console.log(errorReason);
-                            callback(null, 'ERROR CSV salvataggio dati protocollo nella cartella ... ok');
-                            // Error Reason is either a string ("File does not exist") 
-                            // or an error object returned from require('fs').readFile 
+                        // console.log('ELENCO OGGETTI DA INSERIRE -------------------------------------------------------------------------');
+                        // console.log(bulkObjArray);
+                        // console.log('START ELENCO CHIAMATE .------------------------------------------------------------------------------');
+
+                        // setTimeout( function () {callback(null, 'STEP-START LOAD CSV e TO JSON + HASH + DB')},1000);
+
+                        var cntIterator = 0, cntTimes = 1;
+                        Promise.all(bulkObjArray.map(function(item) { 
+                            
+                            return databaseModule.findOrCreateSID_F24_PAGAMENTI(item).then(function(result) { 
+                                // console.log('<<<PROMISE-RISULTATO chiamata singola -----------------------------------');
+                                cntIterator++;
+                                if (cntIterator > 100){
+                                    emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 700, txt: 'Inseriti ' + (cntIterator * cntTimes)}});
+                                    cntIterator = 0; cntTimes++;
+                                }
+                                // console.log(result);
+                                // console.log(result[0]);
+                                // console.log(result[0].dataValues);
+                                // console.log(result[1]);
+                                // console.log('>>>PROMISE-RISULTATO chiamata singola -----------------------------------');
+                                return {dataValues : result[0].dataValues, isInserted : result[1] };
+                            });
+                        })).then(function(results) {
+                            console.log('PROMISE-RISULTATO FINALE  =========================================== ');
+                            console.log(results);
+
+                            var cntInsert = 0;
+                            var cntTotal = results.length;
+                            results.forEach(function (item) {
+                                if (item.isInserted) cntInsert ++;
+                            })
+
+                            // conteggio elementi iseriti rispetto a quelli inviati...
+                            callback(null, {
+                                msg: 'Stats operazione di inserimento',
+                                cntTotal : cntTotal,
+                                cntInsert: cntInsert
+                            });
+                            // results is an array of names
                         });
-                        */
 
-
-
-
-                        
+                                           
                     },
        
+
+                    function(callback){
+                        log.log2console('STEP-TIMEOUT:');
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 800, txt: 'Altro 2 Timeout'}});
+                        // callback(null, 'STEP-START ok');
+                        setTimeout( function () {callback(null, 'STEP-START ok')},1000);
+                    },
+
+
                     function(callback){
                         log.log2console('STEP-ESECUZIONE INSERIMENTI:-ASYNC null salvataggio dati protocollo nella cartella:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 700, txt: 'Inserimmetni'}});
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 900, txt: 'Inseri...'}});
                         callback(null, 'salvataggio dati protocollo nella cartella ... ok');
                     },
         
@@ -331,17 +395,21 @@ router.post('/updata/:sseId',  function(req, res) {
                 if(err){
                     log.log2console(err);
                     // logConsole.error(err);
-                    res.status(ErrorMsg.code).send(ErrorMsg);
+                    res.status(481).send(err);
+                    // res.status(ErrorMsg.code).send(ErrorMsg);
                 } else {
                     log.log2console('ALL OK!!!!');
                     // results.msg = htmlResponseMsg;
                     // log.log2console(htmlResponseMsg);
+                    console.log(results);
+                    emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 1000, txt: 'Operazioni completate'}});
+                    
                     var Msg = {
-                                   title: 'Istanza ricevuta con successo!',
-                                    msg: objFieldSanitized,
-                                    reqId: reqId,
-                                    code : 200
-                                }
+                                title: 'Operazione completata',
+                                msg: results,
+                                reqId: reqId,
+                                code : 200
+                            };
                     res.status(200).send(Msg);
                 }
             });

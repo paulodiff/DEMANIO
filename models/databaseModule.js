@@ -13,8 +13,108 @@ var log = require('../models/loggerModule.js');
 var uuidV4 = require('uuid/v4');
 var Sequelize = require("sequelize");
 
+                          
+
 
 module.exports = {
+
+
+theSame : function(p) {
+    console.log('theSame..............');
+    console.log(p);
+    return p;
+},
+
+theSamePromise : function(p) {
+    console.log('theSamePromise');
+    console.log(p);
+    return new Promise(function(resolve, reject) {
+        console.log('theSamePromise..............');
+        resolve('promise:ok');
+    });
+},
+
+bulkCreateSID_F24_PAGAMENTI : function(plist){
+    
+    return new Promise(function(resolve, reject) {
+            
+        console.log('bulkCreateSID_F24_PAGAMENTI ... list objects');
+        console.log(plist);
+
+        models.SID_F24_PAGAMENTI.bulkCreate(plist)
+                .then(function(anotherTask) {
+                    resolve(anotherTask)
+                }).catch(function(error) {
+                    reject(error);
+        });
+    });
+},
+
+findOrCreateSID_F24_PAGAMENTI : function(p) {
+
+    return new Promise(function(resolve, reject) {
+        
+    console.log('findOrCreateSID_F24_PAGAMENTI ');
+    console.log(p);
+
+    models.SID_F24_PAGAMENTI.findOrCreate({ where : { HASH : p.HASH } , defaults : p })
+            .then(function(anotherTask) {
+                resolve(anotherTask)
+            }).catch(function(error) {
+                reject(error);
+        });
+    });
+},
+
+
+saveSID_F24_PAGAMENTI : function(p){
+
+    return new Promise(function(resolve, reject) {
+        
+            console.log('saveSID_F24_PAGAMENTI');
+            console.log(p);
+            // models.SID_F24_PAGAMENTI.build(p
+            models.SID_F24_PAGAMENTI.findOrCreate(p
+              /*
+              { 
+
+                ID_AMMINISTRAZIONE: p[0],
+                TIPO_AMMINISTRAZIONE: p[1],
+                AMMINISTRAZIONE: p[2],
+                ANNO_ATTO: p[3],
+                NUMERO_ATTO: p[4],
+                TIPO_ATTO: p[5],
+                ID_CONCESSIONE: p[6],
+                NUMERO_RATA: p[7],
+                ANNO_RATA: p[8],
+                IMPORTO_CANONE_RICHIESTO: p[9],
+                IMPORTO_CANONE_VERSATO: p[10],
+                IMPORTO_QUOTA_REG_RICHIESTA: p[11],
+                IMPORTO_QUOTA_REG_VERSATA: p[12],
+                IMPORTO_INDENNIZZI_RICHIESTI: p[13],
+                IMPORTO_INDENNIZZI_VERSATI: p[14],
+                DESCRIZIONE: p[15],
+                HASH: hash,
+                TS: reqId,
+                FILE_NAME_IMPORT: fName,
+              }
+
+              */
+            )
+            .save()
+            .then(function(anotherTask) {
+                console.log('saveSID_F24_PAGAMENTI:OK');
+                resolve(anotherTask)
+            }).catch(function(error) {
+                console.log('saveSID_F24_PAGAMENTI:ERROR');
+                console.log(error);
+                // reject(error);
+                resolve({msg: 'SID_F24_PAGAMENTI save ERROR', err: error});
+            });
+          });
+        
+
+},
 
 // rende persistente su database i dati della transazione di autenticazione
 saveAuthTransaction: function(user){

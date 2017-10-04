@@ -27,8 +27,13 @@ emitterBus.eventBus.on('logMessage', function(data) {
     sseId: data.sseId
   }
   
-  clients[data.sseId].write('id: ' + 'logMessage' + '\n');
-  clients[data.sseId].write("data: " + JSON.stringify(msg) + "\n\n");
+  if (clients[data.sseId]) {
+    clients[data.sseId].write('id: ' + 'logMessage' + '\n');
+    clients[data.sseId].write("data: " + JSON.stringify(msg) + "\n\n");
+  } else {
+    console.log('#SSE#:Write ERROR client not found ID:',data.sseId);
+  }
+
 });
 
 channels['CH1'] = { id: 'CH1', desc: 'CH1D'};

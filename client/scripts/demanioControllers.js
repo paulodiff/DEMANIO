@@ -13,6 +13,8 @@ angular.module('myApp.controllers')
 
     $scope.my_progressBarValue = 33;
     $scope.my_progressBarValue2 = 21;
+    $scope.my_progressText = '';
+    $scope.logOperazioni = 'nulla';
 
     $scope.my_progressBarFunction = function(){
         $log.info('sid24pCtrl: progressBarFunction',$scope.my_progressBarValue,$scope.my_progressBarValue2);
@@ -77,6 +79,7 @@ angular.module('myApp.controllers')
         }).then(function (resp) {
             console.log('Success ');
             console.log(resp);
+            $scope.logOperazioni = resp.data.msg;
 
                //$rootScope.$broadcast('dialogs.wait.complete'); 
                // dialogs.notify('Richiesta correttamente pervenuta', resp.data);
@@ -123,14 +126,22 @@ angular.module('myApp.controllers')
 
     };
 
+    // aggancia il servizio dei messaggi per la chiamata
 
     $scope.tweets = SseService.getMessages(function(response) {
         $log.info('sid24pCtrl: tweets', response);
         var tweets = JSON.parse(response.data);
-        $log.info(tweets);
-        $log.info(tweets.msg.itemN);
-        $scope.my_progressBarValue = tweets.msg.itemN;
-        $scope.apply;
+        // $log.info(tweets);
+        $log.info('SSE log msg :',tweets.msg.itemN,tweets.msg.txt);
+        
+        //$scope.my_progressBarValue = tweets.msg.itemN;
+        //if ( tweets.msg.txt ) $scope.my_progressText = tweets.msg.txt;
+
+        $scope.$apply( function() {
+            $scope.my_progressBarValue = tweets.msg.itemN;
+            if ( tweets.msg.txt ) $scope.my_progressText = tweets.msg.txt;
+    
+        });
         // $scope.tweets = tweets;
     });
 
