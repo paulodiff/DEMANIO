@@ -183,14 +183,14 @@ router.post('/updata/:sseId',  function(req, res) {
     async.series([       
                     function(callback){
                         log.log2console('STEP-START:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'insert', itemN: 102, txt: 'Start operations 2..'} });
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'insert', itemN: 102, txt: 'Avvio operazioni ...'} });
                         // callback(null, 'STEP-START ok');
-                        setTimeout( function () {callback(null, 'STEP-START ok')},1000);
+                        setTimeout( function () {callback(null, 'STEP-START:ok')},1000);
                     },
                     
                     function(callback) {
                         log.log2console('STEP-FORM-PARSING: form parsing');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 200, txt: 'Form parsing'}});
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 200, txt: 'Ricevimento dati inviati ...'}});
                         var options = {  maxFilesSize: ENV_PROT.upload_size  };
                         var form = new multiparty.Form(options);
                         form.parse(req, 
@@ -207,20 +207,20 @@ router.post('/updata/:sseId',  function(req, res) {
                                     objFieldList = fields;
                                     objFilesList = files;
                                     log.log2console(objFieldList);
-                                    callback(null, 'STEP-FORM-PARSING ... ok');
+                                    callback(null, 'STEP-FORM-PARSING:ok');
                                 }
                         });
                     },
         
                     // ##### Input sanitizer & validator------------------------------------------------------------------------
                     function(callback){
-                        log.log2console('STEP-SANYTIZE-INPUT:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 300, txt: 'Form sanit ... '}});
+                        log.log2console('STEP-SANITIZE-INPUT:');
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 300, txt: 'Controllo dati ...'}});
             
                         if (sanitizeInput(objFieldList, objFieldSanitized, reqId)){
                             log.log2console('sanitizeInput: ok');
                             log.log2console(objFieldSanitized);
-                            callback(null, 'sanitizeInput ... ok');
+                            callback(null, 'STEP-SANITIZE-INPUT:ok');
                         } else {
                             ErrorMsg = {
                                 title: 'Check input error',
@@ -237,12 +237,12 @@ router.post('/updata/:sseId',  function(req, res) {
         
                     function(callback){
                         log.log2console('STEP-SAVE-FILE:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 500, txt: 'Form save'}});
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 500, txt: 'Salvataggio dati'}});
                         
                         if (savingFiles(objFilesList, objFieldSanitized, reqId )){
                             log.log2console('savingFiles: ok');
                             log.log2console(objFieldSanitized);
-                            callback(null, 'savingFiles ... ok');
+                            callback(null, 'STEP-SAVE-FILE:ok');
                         } else {
                             ErrorMsg = {
                                 title: 'saving file error',
@@ -261,15 +261,29 @@ router.post('/updata/:sseId',  function(req, res) {
                         log.log2console('STEP-TIMEOUT:');
                         emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 600, txt: 'Timeout'}});
                         // callback(null, 'STEP-START ok');
-                        setTimeout( function () {callback(null, 'STEP-START ok')},1000);
+                        setTimeout( function () {callback(null, 'STEP-TIMEOUT:ok')},1000);
                     },
 
 
                     function(callback){
-                        log.log2console('LOAD CSV e TO JSON + HASH + DB:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 700, txt: 'LOAD CSV e TO JSON + HASH + DB'}});
+                        log.log2console('STEP-LOAD-FILE-DB-INSERT:');
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 700, txt: 'Caricamento dati da file e database ...'}});
                        
                         var csv  = require('node-csvjsonlite');
+
+                        if (!objFieldSanitized.files[0]) {
+                            ErrorMsg = {
+                                title: 'FILE NOT UPLOADED!',
+                                msg: 'FILE NOT UPLOADED!',
+                                code : 457
+                            }
+                            log.log2console(reqId);
+                            log.log2console(ErrorMsg);
+                            // logConsole.error(ErrorMsg);
+                            callback(ErrorMsg, null);
+                            return;
+                        }
+
                         var csvFilePath = objFieldSanitized.files[0].destFile;
 
                         // var hmac = crypto.createHmac('sha256', 'DEMANIO');
@@ -356,12 +370,10 @@ router.post('/updata/:sseId',  function(req, res) {
                                 if (item.isInserted) cntInsert ++;
                             })
 
+                            var msgEnd = 'STEP-LOAD-FILE-DB-INSERT: totali: ' + cntTotal + ' inserite ' + cntInsert;
+
                             // conteggio elementi iseriti rispetto a quelli inviati...
-                            callback(null, {
-                                msg: 'Stats operazione di inserimento',
-                                cntTotal : cntTotal,
-                                cntInsert: cntInsert
-                            });
+                            callback(null, msgEnd );
                             // results is an array of names
                         });
 
@@ -370,24 +382,12 @@ router.post('/updata/:sseId',  function(req, res) {
        
 
                     function(callback){
-                        log.log2console('STEP-TIMEOUT:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 800, txt: 'Altro 2 Timeout'}});
+                        log.log2console('STEP-FINE-OPERAZIONI-TIMEOUT:');
+                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 800, txt: 'Timeout'}});
                         // callback(null, 'STEP-START ok');
-                        setTimeout( function () {callback(null, 'STEP-START ok')},1000);
-                    },
+                        setTimeout( function () {callback(null, 'STEP-FINE-OPERAZIONI-TIMEOUT:ok')},1000);
+                    }
 
-
-                    function(callback){
-                        log.log2console('STEP-ESECUZIONE INSERIMENTI:-ASYNC null salvataggio dati protocollo nella cartella:');
-                        emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 900, txt: 'Inseri...'}});
-                        callback(null, 'salvataggio dati protocollo nella cartella ... ok');
-                    },
-        
-                    function(callback){
-                        log.log2console('STEP-SAVE-FILE ASYNC preparazione messaggio risposta:');
-        
-                        callback(null, 'Messaggio di risposta preparato ok');
-                    }        
         
             ],function(err, results) {
                 // results is now equal to: {one: 1, two: 2}
@@ -417,12 +417,14 @@ router.post('/updata/:sseId',  function(req, res) {
 }); 
 
 
-router.get('/cdc', utilityModule.ensureAuthenticated, function(req, res) {
-    log.log2console('DemanioMgr get /cdc : ');
+router.get('/SID_F24', 
+    // utilityModule.ensureAuthenticated, 
+    function(req, res) {
+    log.log2console('DemanioMgr get /SID_F24 : ');
 
     console.log(req.query);
 
-    databaseModule.getPostaCDC()
+    databaseModule.getSID_F24_PAGAMENTIlist()
     .then( function (result) {
       // log.log2console(result);
       return res.status(200).send(result);

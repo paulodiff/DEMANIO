@@ -9,9 +9,17 @@
 angular.module('myApp.services')
    
   
-.factory('PostaService',             ['ENV', '$http', '$rootScope', '$log', '$localStorage',
-                            function ( ENV,   $http,   $rootScope,   $log,   $localStorage) {
+.factory('DatabaseService',             ['ENV', '$http', '$rootScope', '$log', '$localStorage','$q',
+                            function ( ENV,   $http,   $rootScope,   $log,   $localStorage, $q) {
   return {
+
+    getSID_F24_PAGAMENTIlist: function(obj) {
+        $log.info('DatabaseService: getSID_F24_PAGAMENTIlist');
+        var fullApiEndpoint = $rootScope.base_url + '/' + ENV.apiDemanio + '/SID_F24'; 
+        $log.info('DatabaseService: api : ' + fullApiEndpoint );
+        return $http({ url: fullApiEndpoint,  method: "GET", params: obj });
+    },
+
 
     getPostaList: function(options) {
         var deferred = $q.defer();

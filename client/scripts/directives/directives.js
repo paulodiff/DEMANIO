@@ -75,11 +75,11 @@ angular.module('myApp.directives')
             f1: '&'
            //bindAttr: '='
           },
-          template: '<div class="u-background-20 u-padding-all-s u-text-r-xxl"><p>Progress bar demo directive - {{p1}}</p>' + 
+          template: '<div class="u-background-20 u-padding-all-s u-text-r-xxl">' + 
                     '<progress value="{{p1}}" max="1000"></progress></br>' +
                     '<small>{{t1}}</small></br>' +
-                    '<button class="Button Button--info u-text-r-xs" ng-click="addItem()">ADD(int)</button>' + 
-                    '<button class="Button Button--info u-text-r-xs" ng-click="resetItem()">RESET(int)</button>' + 
+                    // '<button class="Button Button--info u-text-r-xs" ng-click="addItem()">ADD(int)</button>' + 
+                    // '<button class="Button Button--info u-text-r-xs" ng-click="resetItem()">RESET(int)</button>' + 
                     '</div>',
           /*
           template: '<div class="u-text-r-xxl u-padding-all-s u-background-60"><input ng-model="progressBarValue">' +

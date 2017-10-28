@@ -14,7 +14,7 @@ angular.module('myApp', [//'ionic',
                          //'satellizer',
                          //'ngResource',
                          //'ngSanitize',
-                         //'ngMessages',
+                         'ngMessages',
                          //'naif.base64',
                          //'ngCordova',
                          'angularSpinner',
@@ -90,7 +90,7 @@ angular.module('myApp', [//'ionic',
     $stateProvider.state('homeIstanze', {
         url: '/homeIstanze',
         controller: 'homeCtrl',
-        templateUrl: 'templates/homeIstanze.html',
+        templateUrl: 'templates/homeIstanzeITALIA.html',
         accessLogged: false,
         accessLevel: 'free1' 
     });
@@ -99,7 +99,7 @@ angular.module('myApp', [//'ionic',
     $stateProvider.state('elencoIstanze', {
         url: '/elencoIstanze',
         controller: 'homeCtrl',
-        templateUrl: 'templates/elencoIstanze.html',
+        templateUrl: 'templates/elencoIstanzeITALIA.html',
         accessLogged: false,
         accessLevel: 'free1' 
     });
@@ -155,7 +155,7 @@ angular.module('myApp', [//'ionic',
     
     $stateProvider.state('login', {
         url: '/login',
-        templateUrl: 'templates/loginForm.html',
+        templateUrl: 'templates/loginFormITALIA.html',
         // controller: 'SLoginCtrl',
         controller: 'LoginController',
         accessLogged: false
@@ -170,7 +170,7 @@ angular.module('myApp', [//'ionic',
 */
     $stateProvider.state('logout', {
         url: '/logout',
-        templateUrl: 'templates/loginForm.html',
+        templateUrl: 'templates/loginFormITALIA.html',
         controller: 'LoginController'
     });
       
@@ -201,7 +201,14 @@ angular.module('myApp', [//'ionic',
     templateUrl: 'templates/sid24pForm.html',
     controller: 'sid24pCtrl',
     accessLogged: false
-});
+  });
+
+  $stateProvider.state('anagraficaDemanio', {
+    url: '/anagraficaDemanio',
+    templateUrl: 'templates/anagraficaDemanioForm.html',
+    controller: 'anagraficaDemanioCtrl',
+    accessLogged: false
+  });
 
 
 /*    $stateProvider.state('form', {

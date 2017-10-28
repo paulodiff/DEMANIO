@@ -34,6 +34,22 @@ theSamePromise : function(p) {
     });
 },
 
+getSID_F24_PAGAMENTIlist : function(){
+    
+    return new Promise(function(resolve, reject) {
+
+        console.log('getSID_F24_PAGAMENTIlist');
+        
+        models.SID_F24_PAGAMENTI.findAll()
+        .then(function(anotherTask) {
+            resolve(anotherTask)
+        }).catch(function(error) {
+            reject(error);
+        });
+    })
+},
+
+
 bulkCreateSID_F24_PAGAMENTI : function(plist){
     
     return new Promise(function(resolve, reject) {

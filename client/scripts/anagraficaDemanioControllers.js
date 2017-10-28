@@ -1,12 +1,12 @@
 angular.module('myApp.controllers')
 
-  .controller('sid24pCtrl', 
+  .controller('anagraficaDemanioCtrl', 
 
            ['$scope', '$http', 'dialogs',  '$rootScope', 'AuthService', 'SseService', 'DatabaseService', '$state','ENV', '$log', 'usSpinnerService','Upload',
     function($scope,   $http,  dialogs,     $rootScope,   AuthService,   SseService,  DatabaseService,  $state,  ENV ,  $log,   usSpinnerService,  Upload ) {
 
     
-    $log.info('sid24pCtrl: startUp!');
+    $log.info('anagraficaDemanioCtrl: startUp!');
     
     $scope.model = { progressValue : 22, name : 'oooook' };
     

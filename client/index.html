@@ -115,7 +115,7 @@
     <script src="scripts/configuration.js"></script>
     <script src="scripts/authService.js"></script>
     <script src="scripts/profileService.js"></script>
-    <script src="scripts/postaService.js"></script>
+    <script src="scripts/databaseService.js"></script>
     <script src="scripts/alertService.js"></script>
     <!-- <script src="scripts/accountService.js"></script> -->
     <!-- <script src="scripts/formlyService.js"></script> -->
@@ -130,6 +130,7 @@
     <script src="scripts/homeControllers.js"></script>
     <script src="scripts/profileControllers.js"></script>
     <script src="scripts/demanioControllers.js"></script>
+    <script src="scripts/anagraficaDemanioControllers.js"></script>
     <!-- <script src="scripts/sigControllers.js"></script> -->
     <!-- <script src="scripts/SloginControllers.js"></script> -->
     <!-- <script src="scripts/formlyControllers.js"></script> -->
@@ -153,7 +154,7 @@
     <script src="templates.js"></script>
 
 
-  <title>Preview Layout</title>
+  <title>Demanio Marittimo</title>
 </head>
 
 <body class="t-Pac" ng-app="myApp" ng-controller="AppCtrl"><a id="topPosition"></a>
@@ -172,14 +173,14 @@
 
     <div class="Header-logo Grid-cell" aria-hidden="true">
       <a href="" tabindex="-1">
-        <img src="images/logo_comune_80x80.gif" alt="">
+        <img src="images/logo-150x100.jpg" alt="">
       </a>
     </div>
 
     <div class="Header-title Grid-cell">
       <h1 class="Header-titleLink">
         <a href="/">
-          Comune di Rimini<br>
+           Comune di Rimini / Uff. Demanio Marittimo <br>
           <small></small>
         </a>
       </h1>
@@ -243,7 +244,8 @@
           
           <li><a ui-sref="homeIstanze">Home</a></li>
           <li><a ui-sref="elencoIstanze" >Elenco Istanze</a></li>
-          <li><a ui-sref="sid24p" >sid24p</a></li>
+          <li><a ui-sref="sid24p" >Sid F24 pagamenti</a></li>
+          <li><a ui-sref="anagraficaDemanio" >Anagrafica</a></li>
           <li ng-if="isAuthenticated()"><a ui-sref="profile">Profilo</a></li>
           <li ng-if="!isAuthenticated()"><a ui-sref="login" ui-sref-active="active">Accedi</a></li>
           <li ng-if="isAuthenticated()"><a ui-sref="logout" ui-sref-active="active">Esci</a></li>
