@@ -2,13 +2,15 @@ angular.module('myApp.controllers')
 
   .controller('anagraficaDemanioCtrl', 
 
-           ['$scope', '$http', 'dialogs',  '$rootScope', 'AuthService', 'SseService', 'DatabaseService', '$state','ENV', '$log', 'usSpinnerService','Upload',
-    function($scope,   $http,  dialogs,     $rootScope,   AuthService,   SseService,  DatabaseService,  $state,  ENV ,  $log,   usSpinnerService,  Upload ) {
+           ['$scope', '$http', 'dialogs',  '$rootScope', 'AuthService', 'SseService', 'AlertService', 'DatabaseService', '$state','ENV', '$log', 'usSpinnerService','Upload',
+    function($scope,   $http,   dialogs,     $rootScope,   AuthService,  SseService,  AlertService, DatabaseService,  $state,  ENV ,  $log,    usSpinnerService,  Upload ) {
 
     
     $log.info('anagraficaDemanioCtrl: startUp!');
     
     $scope.model = { progressValue : 22, name : 'oooook' };
+
+    $scope.formStatus = "Browse";
     
 
     $scope.my_progressBarValue = 33;
@@ -194,7 +196,7 @@ angular.module('myApp.controllers')
     $scope.gridOptions.multiSelect = true;
 
 
-    // caricamento dati grid
+    // INIT caricamento dati grid
 
     var options = {};
     DatabaseService.getSID_F24_PAGAMENTIlist(options)
@@ -206,13 +208,104 @@ angular.module('myApp.controllers')
     .catch(function(response) {
       $log.error(response);
       AlertService.displayError(response);
-  });
+    });
+
+    $scope.annullaInserimentoOModifica = function(){
+        $scope.formStatus = "Browse";
+    };
+
+    /* Aggiungi anangrafica */
+    $scope.addData = function(){
+        console.log('Add2------------Data');
+        $scope.formStatus = "EditUpdate";
+
+    /*
+    AlertService.createDialog('templates/postaDialogFormITALIA.html','anagraficaAddDataDialogCtrl')
+    .then(function(dialogData){
+      console.log(dialogData);
+      console.log('Adding data ....');
+
+      var n = $scope.gridOptions.data.length + 1;
+
+      var newItem  = {
+        'posta_id': UtilsService.getTimestampPlusRandom(),
+        'cdc': $scope.model.selectedCdc.codice,
+        'protocollo':dialogData.Protocollo,
+        'tipo_spedizione':dialogData.tipoPostaStampa.id,
+        'destinatario_denominazione':dialogData.Destinatario,
+        'destinatario_citta':dialogData.Citta,
+        'destinatario_via':dialogData.Via,
+        'destinatario_cap':dialogData.Cap,
+        'destinatario_provincia':dialogData.Provincia,
+        'barCode' : dialogData.BarCode ? dialogData.BarCode : '',
+        'verbale' : dialogData.Verbale ? dialogData.Verbale : '',
+        'note': dialogData.Note ? dialogData.Note : ''
+      };
+
+      console.log(dialogData);
+      console.log('Saving ..... ');
+
+      PostaService.addPosta(newItem)
+      .then(function (res) {
+        $scope.gridOptions.data.push(newItem);
+        $log.debug(res);
+        // $scope.user = res.data.user;
+      })
+      .catch(function(response) {
+        $log.error(response);
+        AlertService.displayError(response);
+      });
+
+
+    },function(btn){
+      console.log('Operazione annullata.');
+    });
+    */
+  
+
+
+	}; // end addData
 
 
 
-  }]);
+  }])
 
 
  
+.controller('anagraficaAddDataDialogCtrl',
+  // ['$scope','$modalInstance', 'data',
+function($location, $rootScope, $scope , $uibModalInstance ,  data  ){
+ 
+console.log('customDialogCtrl ....');
+console.log($location.absUrl());
+console.log($location.path());
 
+//-- Variables --//
+$scope.elencoTipoPosta = data;
+
+$scope.modal = {};
+$scope.modal.imgSource = $rootScope.base_url + 'images/popup-unlock.jpg';
+// $scope.modal.tipoPostaStampa = data[0];
+$scope.modal.dataAttuale = moment().format('DD/MM/YYYY');;
+//-- Methods --//
+
+$scope.cancel = function(){
+    $uibModalInstance.dismiss('Canceled');
+}; // end cancel
+
+$scope.save = function(){
+    console.log($scope.modal);
+    $uibModalInstance.close($scope.modal);
+}; // end save
+
+/*
+$scope.hitEnter = function(evt){
+if(angular.equals(evt.keyCode,13) && !(angular.equals($scope.user.name,null) || angular.equals($scope.user.name,'')))
+ $scope.save();
+};
+*/
+
+}
+//]
+); // end controller(customDialogCtrl)
 

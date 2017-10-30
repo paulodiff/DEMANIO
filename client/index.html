@@ -64,8 +64,8 @@
     
 
 
-  <!-- angular-dialog-service -->
-  <script src="bower_components/angular-dialog-service/dist/dialogs.min.js"></script> 
+  <!-- angular-dialog-service PATCH ITALIA-->
+  <script src="bower_components/angular-dialog-service/dist/dialogsITALIA.js"></script> 
 
     <!-- bowser -->
     <script src="bower_components/bowser/src/bowser.js"></script>
@@ -246,6 +246,7 @@
           <li><a ui-sref="elencoIstanze" >Elenco Istanze</a></li>
           <li><a ui-sref="sid24p" >Sid F24 pagamenti</a></li>
           <li><a ui-sref="anagraficaDemanio" >Anagrafica</a></li>
+          <li><a ui-sref="profile">Profilo-1</a></li>
           <li ng-if="isAuthenticated()"><a ui-sref="profile">Profilo</a></li>
           <li ng-if="!isAuthenticated()"><a ui-sref="login" ui-sref-active="active">Accedi</a></li>
           <li ng-if="isAuthenticated()"><a ui-sref="logout" ui-sref-active="active">Esci</a></li>

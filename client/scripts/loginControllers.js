@@ -8,8 +8,8 @@ angular.module('myApp.controllers')
 
 
 .controller("AppCtrl", 
-                    ['$scope', 'dialogs', '$rootScope', 'AuthService', 'Session', '$state','ENV', '$log', '$location','$localStorage', '$http',
-            function($scope,    dialogs,   $rootScope,   AuthService,   Session,   $state, ENV,   $log,   $location,  $localStorage,   $http) {
+                    ['$scope', 'AlertService', '$rootScope', 'AuthService', 'Session', '$state','ENV', '$log', '$location','$localStorage', '$http',
+            function($scope,    AlertService,   $rootScope,   AuthService,   Session,   $state, ENV,   $log,   $location,  $localStorage,   $http) {
 
                 
         $log.info("AppCtrl ... start");
@@ -178,7 +178,7 @@ angular.module('myApp.controllers')
             $log.info(event);
             $log.info(next);
 
-            dialogs.error('Errore di autenticazione','Immettere nome utente e password');
+            AlertService.displayError({title:'Errore di autenticazione',message:'Immettere nome utente e password'});
 /*
     
             var modalInstance = $uibModal.open({
@@ -221,7 +221,7 @@ angular.module('myApp.controllers')
             $log.info(next);
             //$scope.currentUser = Session.nome_breve_utenti;
             
-            dialogs.error('Utente non autenticato','Provvedere ad autenticarsi mediante uno dei metodi previsti.');
+            AlertService.displayError({title:'Utente non autenticato',message:'Provvedere ad autenticarsi mediante uno dei metodi previsti.'});
             $state.go('login');
 
         }); 
@@ -249,7 +249,7 @@ angular.module('myApp.controllers')
             $log.info(event);
             $log.info(next);
             
-            dialogs.error('Utente non oldAppVersion','oldAppVersion.');
+            AlertService.displayError({ message : 'Utente non oldAppVersion', title: 'oldAppVersion.'});
             $state.go('login');
 
         }); 
