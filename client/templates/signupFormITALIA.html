@@ -6,9 +6,9 @@
         <div class="u-layout-wide u-layoutCenter u-layout-r-withGutter">
             <div class="u-layout-centerContent">
                 <section class="u-layout-wide">
-                    <h2 class="u-text-r-l">Gestione autenticazione attraverso **** o *****</h2>
+                    <h1 class="u-text-r-l">Gestione registrazione al portale</h1>
                     <p class="u-lineHeight-l u-text-r-xs u-textSecondary u-padding-r-right">
-                        Form per l'inserimento dei dati di autenticazione del portale
+                        Form per la registrazione dei dati al portale del Demanio Marittimo
                     </p>
                 </section>
             </div>
@@ -27,14 +27,14 @@
     
     
             <div class="Form-field">
-                <label class="Form-label is-required" for="cognome">Utente/Email</label>
+                <label class="Form-label is-required" for="cognome">Email di riferimento</label>
                 <input  class="Form-input u-text-r-s u-borderRadius-m" 
                         id="cognomeRichiedente"
                         name="cognomeRichiedente"
-                        ng-model="user.email" 
+                        ng-model="vm.model.cognomeRichiedente" 
                         aria-required="true" 
-                        ng-minlength="1"
-                        ng-maxlength="100"
+                        ng-minlength="6"
+                        ng-maxlength="10"
                         required>
                         <div ng-messages="vm.userForm.cognomeRichiedente.$error" style="color:maroon" role="alert" ng-if="vm.userForm.cognomeRichiedente.$touched">
                             <div ng-message="required"  class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom">Campo richiesto</div>
@@ -42,14 +42,34 @@
                             <div ng-message="maxlength" class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom">Valore troppo lungo</div>
                         </div>                       
             </div>
-            
+
+            <div class="Form-field">
+                <label class="Form-label is-required" for="nome">CODICE SID</label>
+                <input  class="Form-input u-text-r-s u-borderRadius-m" 
+                        id="nomeRichiedente" 
+                        name="nomeRichiedente"
+                        aria-required="true" 
+                        ng-model="vm.model.nomeRichiedente"
+                        ng-minlength="1"
+                        ng-maxlength="100"
+                        >
+                <!-- <pre>{{vm.userForm.nomeRichiedente.$error}}</pre> -->
+    
+                <div ng-messages="vm.userForm.nomeRichiedente.$error" style="color:red" role="alert">
+                            <div ng-message="required"  class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom">Campo richiesto</div>
+                            <div ng-message="minlength" class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom">Valore troppo corto</div>
+                            <div ng-message="maxlength" class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom">Valore troppo lungo</div>
+                </div>                    
+            </div>
+
+
             <div class="Form-field">
                 <label class="Form-label is-required" for="nome">Password</label>
                 <input  class="Form-input u-text-r-s u-borderRadius-m" 
                         id="nomeRichiedente" 
                         name="nomeRichiedente"
                         aria-required="true" 
-                        ng-model="user.password"
+                        ng-model="vm.model.nomeRichiedente"
                         ng-minlength="1"
                         ng-maxlength="100"
                         >
@@ -62,26 +82,32 @@
                 </div>                    
             </div>
           
+            <div class="Form-field">
+                <label class="Form-label is-required" for="nome">Password</label>
+                <input  class="Form-input u-text-r-s u-borderRadius-m" 
+                        id="nomeRichiedente" 
+                        name="nomeRichiedente"
+                        aria-required="true" 
+                        ng-model="vm.model.nomeRichiedente"
+                        ng-minlength="1"
+                        ng-maxlength="100"
+                        >
+                <!-- <pre>{{vm.userForm.nomeRichiedente.$error}}</pre> -->
+    
+                <div ng-messages="vm.userForm.nomeRichiedente.$error" style="color:red" role="alert">
+                            <div ng-message="required"  class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom">Campo richiesto</div>
+                            <div ng-message="minlength" class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom">Valore troppo corto</div>
+                            <div ng-message="maxlength" class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom">Valore troppo lungo</div>
+                </div>                    
+            </div>
+
         </fieldset>
     
-        <div ng-if="errorMessage">
-            <div class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom" role="alert">
-                <h2 class="u-text-h3">
-                    Si è verificato un errore
-                </h2>
-                <p class="u-text-p">Verificare i dati inseriti!</p>
-            </div>
-        </div>
-
         <button type="submit"
                 ng-disabled="!vm.userForm.$valid || isSubmitting" 
                 class="Button Button--default u-text-r-xs u-inlineBlock"  
-                ng-click="login()">Invia richiesta</button>
-
-        <img ng-if="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                
-        
-        
+                ng-click="uploadCsv()">Invia richiesta</button>
+    
     <!--            
     
         <div class="Form-field Grid-cell u-textRight">

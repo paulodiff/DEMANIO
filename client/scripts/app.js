@@ -75,7 +75,7 @@ angular.module('myApp', [//'ionic',
     //.when('/c?id', '/contacts/:id')
     //.when('/user/:id', '/contacts/:id')
     // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
-    $urlRouterProvider.otherwise('profile');
+    $urlRouterProvider.otherwise('homeIstanze');
     
 /*
     $stateProvider.state('menu', {
@@ -161,13 +161,13 @@ angular.module('myApp', [//'ionic',
         accessLogged: false
     });
 
-/*
+
     $stateProvider.state('signup', {
         url: '/signup',
-        templateUrl: 'templates/Ssignup.html',
+        templateUrl: 'templates/signupFormITALIA.html',
         controller: 'SSignupCtrl',
     });
-*/
+
     $stateProvider.state('logout', {
         url: '/logout',
         templateUrl: 'templates/loginFormITALIA.html',
@@ -207,6 +207,22 @@ angular.module('myApp', [//'ionic',
     url: '/anagraficaDemanio',
     templateUrl: 'templates/anagraficaDemanioForm.html',
     controller: 'anagraficaDemanioCtrl',
+    accessLogged: false
+  });
+
+  $stateProvider.state('consultazione', {
+    url: '/consultazione',
+    templateUrl: 'templates/consultazioneFormITALIA.html',
+    controller: 'profileMgrCtrl',
+    accessLogged: false
+  });
+
+
+  $stateProvider.state('error', {
+    url: '/error',
+    templateUrl: 'templates/errorFormITALIA.html',
+    params:      { 'response': null },
+    controller: 'errorMgrCtrl',
     accessLogged: false
   });
 

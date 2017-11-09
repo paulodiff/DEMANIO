@@ -25,15 +25,19 @@ angular.module('myApp.controllers')
          })
         .catch(function(response) {
             usSpinnerService.stop('spinner-1');
+            $log.info('profileMgrCtrl : CATCH ERROR!!!');
             console.log(response);
+            $state.go('error', {response:response});
+            /*
             var dlg = dialogs.error(response.data.title, response.data.message, {});
 					  dlg.result.then(function(btn){
-                        $state.go('login');
+                        $state.go('error', {response:response});
 						$scope.confirmed = 'You confirmed "Yes."';
 					},function(btn){
-                        $state.go('login');
+                        $state.go('error');
 						$scope.confirmed = 'You confirmed "No."';
-					});
+          });
+          */
        
         });
 

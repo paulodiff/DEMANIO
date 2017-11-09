@@ -47,7 +47,7 @@ angular.module('myApp.services', [])
         }).catch(function(response) {
             $log.info('AuthService login ERROR');
             $log.info(response);
-            throw new Error('thrown in then');
+            throw new Error('AuthService login ERROR');
        });
     },
       

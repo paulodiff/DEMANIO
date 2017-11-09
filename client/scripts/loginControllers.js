@@ -221,8 +221,8 @@ angular.module('myApp.controllers')
             $log.info(next);
             //$scope.currentUser = Session.nome_breve_utenti;
             
-            AlertService.displayError({title:'Utente non autenticato',message:'Provvedere ad autenticarsi mediante uno dei metodi previsti.'});
-            $state.go('login');
+            // AlertService.displayError({title:'Utente non autenticato',message:'Provvedere ad autenticarsi mediante uno dei metodi previsti.'});
+            $state.go('error', {response: {title:'Utente non autenticato',message:'Provvedere ad autenticarsi mediante uno dei metodi previsti.'} } );
 
         }); 
     
@@ -232,15 +232,8 @@ angular.module('myApp.controllers')
             $log.info(event);
             $log.info(next);
             $scope.currentUser = Session.nome_breve_utenti;
+            $state.go('error', {response: {title:'AppCtrl: AUTH_EVENTS.sessionTimeout ... ',message:'Provvedere ad autenticarsi mediante uno dei metodi previsti.'} } );
             
-             var alertPopup = $ionicPopup.alert({
-                title: 'Utente non autenticato o sessione di lavoro scaduta',
-                template: 'Immettere nome utente e password'
-                });
-            alertPopup.then(function(res) {
-                $log.info('AppCtrl: alertPopup : OK');
-                $state.go('home');
-           });
         }); 
         
 
@@ -249,9 +242,7 @@ angular.module('myApp.controllers')
             $log.info(event);
             $log.info(next);
             
-            AlertService.displayError({ message : 'Utente non oldAppVersion', title: 'oldAppVersion.'});
-            $state.go('login');
-
+            $state.go('error', {response: {title:'AppCtrl : AUTH_EVENTS.oldAppVersion ...  ... ',message:'Provvedere ad autenticarsi mediante uno dei metodi previsti.'} } );
         }); 
 
         $rootScope.$on('$stateChangeStart', function (event, next) {
@@ -316,6 +307,8 @@ angular.module('myApp.controllers')
     $scope.user = {};
     $scope.user.email = '';
     $scope.user.password = '';
+    $scope.loading = false;
+    $scope.errorMessage = false;
 
 
     /*
@@ -329,14 +322,8 @@ angular.module('myApp.controllers')
         password: ''
      };
     
-     
-     // loading exiting credentials..
-     if ($localStorage.password){
-        $log.info('recupero password da cache');
-        $scope.credentials.password = $localStorage.password;
-     }
      */
-
+  
   
 
   $log.info('LoginController...fullApiEndpoint');
@@ -345,6 +332,7 @@ angular.module('myApp.controllers')
   $log.info(fullApiEndpoint);
 
   $scope.fullApiEndpoint = fullApiEndpoint;
+  
     
   // title ion-view
   // console.log('LoginController...set title' );
@@ -379,8 +367,9 @@ angular.module('myApp.controllers')
   $scope.login = function () {
 
       $log.info('LoginController : login');
+      $scope.loading = true;
 
-      usSpinnerService.spin('spinner-1');
+      // usSpinnerService.spin('spinner-1');
       //$ionicLoading.show({template: 'Attendere...' });
       
       $log.info(credentials);
@@ -393,21 +382,31 @@ angular.module('myApp.controllers')
     AuthService.login(credentials).then(function (res) {
         $log.info('LoginController : OK');
         $log.info(res);
-
-        usSpinnerService.stop('spinner-1');
+        $scope.loading = false;
+        
         //$ionicLoading.hide();
         $rootScope.$broadcast(ENV.AUTH_EVENTS.loginSuccess);
+
     }, function (error) {
       $log.info('LoginController : login : ERROR'); 
-      $log.info(error); 
+      $log.info('error:', error); 
       //$ionicLoading.hide();
-      usSpinnerService.stop('spinner-1');
+      $scope.loading = false;
+      $scope.errorMessage = error;
+      if(error.status == 0){
+        $scope.errorMessage = '0';
+      } else {
+        $scope.errorMessage = 'Login Fallito! Riprova!';
+      }
+
+        /*
 
       if(error.status == 0){
         $rootScope.$broadcast(ENV.AUTH_EVENTS.serverError);
       } else {
         $rootScope.$broadcast(ENV.AUTH_EVENTS.loginFailed);
       }
+      */
 
     });
   };

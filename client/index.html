@@ -127,11 +127,12 @@
 
     <script src="scripts/rootControllers.js"></script>
     <script src="scripts/loginControllers.js"></script>
+    <script src="scripts/errorControllers.js"></script>
     <script src="scripts/homeControllers.js"></script>
     <script src="scripts/profileControllers.js"></script>
     <script src="scripts/demanioControllers.js"></script>
     <script src="scripts/anagraficaDemanioControllers.js"></script>
-    <!-- <script src="scripts/sigControllers.js"></script> -->
+        <!-- <script src="scripts/sigControllers.js"></script> -->
     <!-- <script src="scripts/SloginControllers.js"></script> -->
     <!-- <script src="scripts/formlyControllers.js"></script> -->
     <!-- <script src="scripts/formlyJirideControllers.js"></script> -->
@@ -173,7 +174,7 @@
 
     <div class="Header-logo Grid-cell" aria-hidden="true">
       <a href="" tabindex="-1">
-        <img src="images/logo-150x100.jpg" alt="">
+        <img src="images/logo-150x100_2.jpg" alt="">
       </a>
     </div>
 
@@ -197,6 +198,8 @@
 
     <div class="Header-utils Grid-cell">
 
+<!--
+
       <div class="Header-search" id="header-search">
         <form class="Form">
   <div class="Form-field Form-field--withPlaceholder Grid" role="search">
@@ -207,6 +210,8 @@
     </button>
   </div>
 </form>
+
+-->
 
       </div>
     </div>
@@ -247,6 +252,9 @@
           <li><a ui-sref="sid24p" >Sid F24 pagamenti</a></li>
           <li><a ui-sref="anagraficaDemanio" >Anagrafica</a></li>
           <li><a ui-sref="profile">Profilo-1</a></li>
+          <li><a ui-sref="login">Login</a></li>
+          <li><a ui-sref="signup">Registrazione</a></li>
+          <li><a ui-sref="consultazione">Consultazione</a></li>
           <li ng-if="isAuthenticated()"><a ui-sref="profile">Profilo</a></li>
           <li ng-if="!isAuthenticated()"><a ui-sref="login" ui-sref-active="active">Accedi</a></li>
           <li ng-if="isAuthenticated()"><a ui-sref="logout" ui-sref-active="active">Esci</a></li>

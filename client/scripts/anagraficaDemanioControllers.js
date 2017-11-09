@@ -214,6 +214,11 @@ angular.module('myApp.controllers')
         $scope.formStatus = "Browse";
     };
 
+    $scope.showDialog = function(){
+        $log.info('showDialog');
+        AlertService.displayError('TEST');
+    };
+
     /* Aggiungi anangrafica */
     $scope.addData = function(){
         console.log('Add2------------Data');

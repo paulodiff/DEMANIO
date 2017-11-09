@@ -155,6 +155,12 @@ router.get('/test/:sseId',  function(req, res) {
     return res.status(200).send(' OK '+ i);
 });        
 
+/*
+
+    route per il caricamento del F24
+
+
+*/
 router.post('/updata/:sseId',  function(req, res) {
     log.log2console('DemanioMgr POST /updata : ', req.params.sseId);
     
@@ -180,7 +186,8 @@ router.post('/updata/:sseId',  function(req, res) {
     var objFieldList = {};
     var objFieldSanitized = {};
 
-    async.series([       
+    async.series([  
+                    // avvio della procedura ... dummy     
                     function(callback){
                         log.log2console('STEP-START:');
                         emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'insert', itemN: 102, txt: 'Avvio operazioni ...'} });
@@ -188,6 +195,7 @@ router.post('/updata/:sseId',  function(req, res) {
                         setTimeout( function () {callback(null, 'STEP-START:ok')},1000);
                     },
                     
+                    // parsing del form dati e file in upload
                     function(callback) {
                         log.log2console('STEP-FORM-PARSING: form parsing');
                         emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 200, txt: 'Ricevimento dati inviati ...'}});
@@ -212,7 +220,7 @@ router.post('/updata/:sseId',  function(req, res) {
                         });
                     },
         
-                    // ##### Input sanitizer & validator------------------------------------------------------------------------
+                    //Input sanitizer & validator------------------------------------------------------------------------
                     function(callback){
                         log.log2console('STEP-SANITIZE-INPUT:');
                         emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 300, txt: 'Controllo dati ...'}});
@@ -235,6 +243,7 @@ router.post('/updata/:sseId',  function(req, res) {
 
                     },
         
+                    // salvataggio del file upload
                     function(callback){
                         log.log2console('STEP-SAVE-FILE:');
                         emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 500, txt: 'Salvataggio dati'}});
@@ -257,6 +266,7 @@ router.post('/updata/:sseId',  function(req, res) {
                         
                     },
 
+                    // dummy actions ...  TIMEOUT
                     function(callback){
                         log.log2console('STEP-TIMEOUT:');
                         emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 600, txt: 'Timeout'}});
@@ -264,7 +274,7 @@ router.post('/updata/:sseId',  function(req, res) {
                         setTimeout( function () {callback(null, 'STEP-TIMEOUT:ok')},1000);
                     },
 
-
+                    // lavorazione del file csv
                     function(callback){
                         log.log2console('STEP-LOAD-FILE-DB-INSERT:');
                         emitterBus.eventBus.sendEvent('logMessage', { sseId: req.params.sseId, msg: { action: 'parsing', itemN: 700, txt: 'Caricamento dati da file e database ...'}});
@@ -336,6 +346,24 @@ router.post('/updata/:sseId',  function(req, res) {
                                 bulkObjArray.push(bulkObj);
                             }
                         }
+
+                        // controllo sul numero degli elementi delle linee 
+                        console.log('Numero di campi test:', headerLine.length);
+                        bulkObjArray.forEach(function(item){
+                            console.log(item);
+                        });
+
+                        ErrorMsg = {
+                            title: 'Errore nel  file caricato ',
+                            msg: ['Non il numero di campi di righe ecc..'],
+                            code : 457
+                        }
+                        log.log2console(reqId);
+                        log.log2console(ErrorMsg);
+                        // logConsole.error(ErrorMsg);
+                        callback(ErrorMsg, null);
+                        return;
+
 
                         // console.log('ELENCO OGGETTI DA INSERIRE -------------------------------------------------------------------------');
                         // console.log(bulkObjArray);

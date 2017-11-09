@@ -4,6 +4,7 @@ node_modules/*
 node_modules/saml2-js/*
 !node_modules/saml2-js/lib-js/
 
+clientAV5
 config
 token
 certs
