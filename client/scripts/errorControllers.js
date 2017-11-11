@@ -9,21 +9,24 @@ angular.module('myApp.controllers')
     $log.info('errorMgrCtrl: startUp!');
     $log.info($stateParams);
 
-    $scope.data = $stateParams.response;
+    var obj = $stateParams.response;
     
-    $scope.model = { progressValue : 22, name : 'oooook' };
-    
+    if(!obj) {
+        $scope.title = 'Non specificato';
+        $scope.message = 'controllare il messaggio originale';
+    } else {
 
-   
-    $scope.user = {};
-    $scope.vm = {}; $scope.vm.model = {}; $scope.vm.userForm = {};
-
-    
-    $scope.vm.model.nomeRichiedente = '';
-    $scope.vm.model.cognomeRichiedente = '';
-
-    $scope.maxProgressBar = 1000;
-    $scope.currentProgressBar = 0;
+        var status = (obj.status ? obj.status : '');
+        var statusText = (obj.statusText ? obj.statusText : '');
+        var title = ((obj.data && obj.data.title) ? obj.data.title : '');
+        var message = ((obj.data && obj.data.message) ? obj.data.message : '');
+        var success =  ((obj.data && obj.data.success) ? obj.data.success : '');
+        if (message == '') { message = obj.message };
+        if (!title) { title = obj.title };
+        $scope.title = title;
+        $scope.message = message;
+    }
+    $scope.obj = $stateParams;
 
 
   }]);

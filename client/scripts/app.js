@@ -14,6 +14,7 @@ angular.module('myApp', [//'ionic',
                          //'satellizer',
                          //'ngResource',
                          //'ngSanitize',
+                         'ngAnimate',
                          'ngMessages',
                          //'naif.base64',
                          //'ngCordova',
@@ -176,7 +177,7 @@ angular.module('myApp', [//'ionic',
       
     $stateProvider.state('profile', {
         url: '/profile',
-        templateUrl: 'templates/profileForm.html',
+        templateUrl: 'templates/profileFormITALIA.html',
         controller: 'profileMgrCtrl',
         accessLogged: true
     });
@@ -221,7 +222,7 @@ angular.module('myApp', [//'ionic',
   $stateProvider.state('error', {
     url: '/error',
     templateUrl: 'templates/errorFormITALIA.html',
-    params:      { 'response': null },
+    params:      { 'response': null, 'info': null },
     controller: 'errorMgrCtrl',
     accessLogged: false
   });

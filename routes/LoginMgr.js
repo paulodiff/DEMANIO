@@ -80,60 +80,52 @@ router.post('/LDAPlogin', function(req, res) {
 
   ldap.authenticate(username, password, function (err, user) {
     console.log('LDAP ...', username, password);
+
     if (err) {
-      console.log('LDAP authentication error:');
-      console.log(err);
-      //logConsole(err);
-      //logError(err);
-      //logDataAnalysis({action: 'login_failed', eventTime: new Date(), user: {name : username}, params : {} });
-      res.status(401).json({
-                          success: false,
-                          data:err
-                      });
+      console.log('LDAP authentication error:'); console.log(err);
+           
       ldap.close(function(err) { 
         console.log('LDAP ... closing connection ...:');
         console.log(err); 
       });
+
+      res.status(401).json({success: false, data:err });
+
       return;
     }
-    //logAccess("Accesso effettuato : " + username);    
-    //logConsole('LDAP.. ')
-    //logConsole(user);
-    //logDataAnalysis({action: 'login_success', eventTime: new Date(), user: user,  params : {} });
 
+    console.log('LDAP ... closing connection ...:');
+    ldap.close(function(err) { console.log(err); });
     
-     var userLogin = { 
+    var userLogin = { 
           'issuer' : 'LDAP',
           'userid' : user.name,
           'name' : user.name,
           'displayName' : user.displayName,
           'userEmail' : user.mail,
           'isAdmin': false
-      };
+    };
 
       // controllo matricole amministrative
 
-      console.log('Controllo matricola se amministrativa', user.name);
-      console.log(ENV.matricoleAmministrativeFilePath);
+    console.log('Controllo matricola se amministrativa', user.name);
+    console.log(ENV.matricoleAmministrativeFilePath);
   
-      var matricoleAmministrativeTxt = fs.readFileSync(ENV.matricoleAmministrativeFilePath).toString();
-      console.log(matricoleAmministrativeTxt);
+    var matricoleAmministrativeTxt = fs.readFileSync(ENV.matricoleAmministrativeFilePath).toString();
+     console.log(matricoleAmministrativeTxt);
       // validazione
   
-      var matricoleAmministrative = new RegExp('(?:[\s]|^)(' + matricoleAmministrativeTxt + ')(?=[\s]|$)' , 'i');
-      if (matricoleAmministrative.test(user.name)){
+    var matricoleAmministrative = new RegExp('(?:[\s]|^)(' + matricoleAmministrativeTxt + ')(?=[\s]|$)' , 'i');
+    if (matricoleAmministrative.test(user.name)){
         console.log("Check : " + user.name + "OK");
         userLogin.isAdmin = true;
-      }
+    }
 
-
-      console.log(userLogin);
+    console.log(userLogin);
 
     var token = utilityModule.createJWT(userLogin);
  
     //Session.create(res.data.id_utenti, res.data.nome_breve_utenti, res.data.token,  res.data.isadmin_utenti);
-
-    ldap.close(function(err) { console.log(err); });
 
     res.status(200).json({
       success: true,

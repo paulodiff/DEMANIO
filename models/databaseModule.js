@@ -20,7 +20,7 @@ module.exports = {
 
 
 theSame : function(p) {
-    console.log('theSame..............');
+    console.log('databaseModule: theSame..............');
     console.log(p);
     return p;
 },
@@ -29,7 +29,7 @@ theSamePromise : function(p) {
     console.log('theSamePromise');
     console.log(p);
     return new Promise(function(resolve, reject) {
-        console.log('theSamePromise..............');
+        console.log('databaseModule:theSamePromise..............');
         resolve('promise:ok');
     });
 },
@@ -38,7 +38,7 @@ getSID_F24_PAGAMENTIlist : function(){
     
     return new Promise(function(resolve, reject) {
 
-        console.log('getSID_F24_PAGAMENTIlist');
+        console.log('databaseModule:getSID_F24_PAGAMENTIlist');
         
         models.SID_F24_PAGAMENTI.findAll()
         .then(function(anotherTask) {
@@ -54,7 +54,7 @@ bulkCreateSID_F24_PAGAMENTI : function(plist){
     
     return new Promise(function(resolve, reject) {
             
-        console.log('bulkCreateSID_F24_PAGAMENTI ... list objects');
+        console.log('databaseModule:bulkCreateSID_F24_PAGAMENTI ... list objects');
         console.log(plist);
 
         models.SID_F24_PAGAMENTI.bulkCreate(plist)
@@ -70,7 +70,7 @@ findOrCreateSID_F24_PAGAMENTI : function(p) {
 
     return new Promise(function(resolve, reject) {
         
-    console.log('findOrCreateSID_F24_PAGAMENTI ');
+    console.log('databaseModule:findOrCreateSID_F24_PAGAMENTI ');
     console.log(p);
 
     models.SID_F24_PAGAMENTI.findOrCreate({ where : { HASH : p.HASH } , defaults : p })
@@ -87,7 +87,7 @@ saveSID_F24_PAGAMENTI : function(p){
 
     return new Promise(function(resolve, reject) {
         
-            console.log('saveSID_F24_PAGAMENTI');
+            console.log('databaseModule:saveSID_F24_PAGAMENTI');
             console.log(p);
             // models.SID_F24_PAGAMENTI.build(p
             models.SID_F24_PAGAMENTI.findOrCreate(p
@@ -119,13 +119,13 @@ saveSID_F24_PAGAMENTI : function(p){
             )
             .save()
             .then(function(anotherTask) {
-                console.log('saveSID_F24_PAGAMENTI:OK');
+                console.log('databaseModule:saveSID_F24_PAGAMENTI:OK');
                 resolve(anotherTask)
             }).catch(function(error) {
-                console.log('saveSID_F24_PAGAMENTI:ERROR');
+                console.log('databaseModule:saveSID_F24_PAGAMENTI:ERROR');
                 console.log(error);
                 // reject(error);
-                resolve({msg: 'SID_F24_PAGAMENTI save ERROR', err: error});
+                resolve({msg: 'databaseModule:SID_F24_PAGAMENTI save ERROR', err: error});
             });
           });
         
@@ -137,7 +137,7 @@ saveAuthTransaction: function(user){
 
   return new Promise(function(resolve, reject) {
 
-    console.log('saveAuthTransaction');
+    console.log('databaseModule:saveAuthTransaction');
     console.log(user);
     models.SpidLog.build(
       { 
@@ -175,7 +175,7 @@ saveAuthTransaction: function(user){
 saveIstanza: function(data){
 
     return new Promise(function(resolve, reject) {
-        console.log('saveIstanza');
+        console.log('databaseModule:saveIstanza');
         console.log(data);
         models.Istanze.build({
             ts: new Date(),
@@ -202,7 +202,7 @@ getAuthList: function(userid){
 
     return new Promise(function(resolve, reject) {
 
-        console.log('getAuthList');
+        console.log('databaseModule:getAuthList');
         console.log(userid);
 
         models.SpidLog.findAll({
@@ -222,7 +222,7 @@ getIstanzeList: function(userid){
 
     return new Promise(function(resolve, reject) {
 
-        console.log('getIstanzeList');
+        console.log('databaseModule:getIstanzeList');
         console.log(userid);
 
         models.Istanze.findAll({

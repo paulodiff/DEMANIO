@@ -1,6 +1,6 @@
 <section>
 
-<div class="u-layout-wide u-layoutCenter u-layout-withGutter u-padding-r-top u-padding-bottom-xxl">
+<div class="u-layout-wide u-layoutCenter u-layout-withGutter u-padding-all-xl u-padding-r-top u-padding-bottom-xxl">
           
            <h1 class="u-text-h2">Consultazione dati RATA CONCESSIONE</h1>
 
@@ -11,8 +11,12 @@
   <tbody>
     <tr>
           <td><b>Nome<b></td>
-          <td>{{user.nome}} - {{user.cognome}}</td>
+          <td>{{user.name}} - {{user.cognome}}</td>
     </tr>
+    <tr>
+        <td><b>displayName<b></td>
+        <td>{{user.displayName}}</td>
+  </tr>
     <tr>
           <td><b>Codice Fiscale<b></td>
           <td>{{user.CodiceFiscale}}</td>
@@ -24,7 +28,11 @@
     <tr>
           <td><b>Data Nascita<b></td>
           <td>{{user.dataNascita}}</td>
-    </tr>    
+    </tr>  
+    <tr>
+        <td><b>DbInfo / AppVersion<b></td>
+        <td>{{user.dbInfo}} - {{user.appVersion}}</td>
+   </tr>    
   </tbody>
 </table>
 <hr>

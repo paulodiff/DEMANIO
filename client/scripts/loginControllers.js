@@ -379,7 +379,7 @@ angular.module('myApp.controllers')
           password: $scope.user.password
       };
 
-    AuthService.login(credentials).then(function (res) {
+    AuthService.loginLDAP(credentials).then(function (res) {
         $log.info('LoginController : OK');
         $log.info(res);
         $scope.loading = false;

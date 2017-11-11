@@ -30,6 +30,7 @@ router.get('/me', utilityModule.ensureAuthenticated, function(req, res) {
 
     async.series([
       function(callback) { 
+        log.log2console('ProfileMgr call getAuthList ...');
           databaseModule.getAuthList(req.user.userid)
          .then( function (result) {
                   // log.log2console(result);
@@ -42,6 +43,7 @@ router.get('/me', utilityModule.ensureAuthenticated, function(req, res) {
                 });
       },
       function(callback) { 
+         log.log2console('ProfileMgr call getIstanzeList ...');
           databaseModule.getIstanzeList(req.user.userid)
          .then( function (result) {
                   // log.log2console(result);
@@ -55,7 +57,7 @@ router.get('/me', utilityModule.ensureAuthenticated, function(req, res) {
       },
     ],function(err, results) {
         // results is now equal to: {one: 1, two: 2}
-        log.log2console('ASYNC -- FINAL!:');
+        log.log2console('ProfileMgr ASYNC.series -- FINAL!:');
         if(err){
             log.log2console(err);
             res.status(500).send(err);

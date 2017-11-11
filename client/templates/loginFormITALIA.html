@@ -1,3 +1,15 @@
+<div ng-if="errorMessage">
+        <div class="Prose Alert Alert--error Alert--withIcon u-layout-prose u-padding-r-bottom u-padding-r-right u-margin-r-bottom" role="alert">
+            <h2 class="u-text-h3">
+                Si è verificato un errore
+            </h2>
+            <p class="u-text-p">Verificare i dati inseriti!</p>
+            <button   class="Button Button--default u-text-r-xs u-inlineBlock"   ng-click="errorMessage = 'sss' ">ok</button>
+
+        </div>
+</div>
+
+
 <section>
 
 <div class="u-layout-wide u-layoutCenter u-layout-withGutter u-padding-r-top u-padding-bottom-xxl">
@@ -16,9 +28,9 @@
     </div>
 
    
-        <article class="Prose">
+   
 
-            <form   class="Form Form--spaced u-padding-all-xl u-text-r-xs"
+        <form   class="Form Form--spaced u-padding-all-xl u-text-r-xs"
             name="vm.userForm"
             ng-show="!isSubmitting">
         <fieldset class="Form-fieldset">
@@ -93,7 +105,6 @@
         </div>
     -->
     
-    
         </div>
     </form>
 
@@ -122,14 +133,23 @@
 
     -->
 
-        <div ng-if="isAuthenticated()">
-            <p>Cliccando il bottone seguente è possibile disconnettersi dall'account SPID o FEDERA</p>
-              <button class="Button Button--danger u-text-r-xs" ng-click="logout('')">
-                DISCONNETTI
-              </button>
-          </div>
 
 
-        </article>
+    <div class="u-text-r-xxl u-padding-all-s">
+            <div class="u-layout-wide u-layoutCenter u-layout-r-withGutter">
+                <div class="u-layout-centerContent">
+                    <section class="u-layout-wide">
+                            <div ng-if="isAuthenticated()">
+                                    <h2 class="u-text-r-l">Cliccando il bottone seguente è possibile disconnettersi dall'account</h2>
+                                      <button class="Button Button--danger u-text-r-xs" ng-click="logout('')">
+                                        DISCONNETTI
+                                      </button>
+                                </div>
+                                            </section>
+                </div>
+              </div>
+        </div>
+
+        
 </div>        
 </section>

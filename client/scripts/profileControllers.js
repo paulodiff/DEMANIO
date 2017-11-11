@@ -27,7 +27,7 @@ angular.module('myApp.controllers')
             usSpinnerService.stop('spinner-1');
             $log.info('profileMgrCtrl : CATCH ERROR!!!');
             console.log(response);
-            $state.go('error', {response:response});
+            $state.go('error', {response:response, info : {source: 'profileController', action : 'profile'}});
             /*
             var dlg = dialogs.error(response.data.title, response.data.message, {});
 					  dlg.result.then(function(btn){

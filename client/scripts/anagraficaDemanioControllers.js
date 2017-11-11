@@ -2,8 +2,8 @@ angular.module('myApp.controllers')
 
   .controller('anagraficaDemanioCtrl', 
 
-           ['$scope', '$http', 'dialogs',  '$rootScope', 'AuthService', 'SseService', 'AlertService', 'DatabaseService', '$state','ENV', '$log', 'usSpinnerService','Upload',
-    function($scope,   $http,   dialogs,     $rootScope,   AuthService,  SseService,  AlertService, DatabaseService,  $state,  ENV ,  $log,    usSpinnerService,  Upload ) {
+           ['$scope', '$q', '$http', 'dialogs',  '$rootScope', 'AuthService', 'SseService', 'AlertService', 'DatabaseService', '$state','ENV', '$log', 'usSpinnerService','Upload',
+    function($scope,   $q,   $http,   dialogs,     $rootScope,   AuthService,  SseService,  AlertService, DatabaseService,  $state,  ENV ,  $log,    usSpinnerService,  Upload ) {
 
     
     $log.info('anagraficaDemanioCtrl: startUp!');
@@ -11,6 +11,7 @@ angular.module('myApp.controllers')
     $scope.model = { progressValue : 22, name : 'oooook' };
 
     $scope.formStatus = "Browse";
+    $scope.errorMessage = "";
     
 
     $scope.my_progressBarValue = 33;
@@ -32,8 +33,9 @@ angular.module('myApp.controllers')
     $scope.vm = {}; $scope.vm.model = {}; $scope.vm.userForm = {};
 
     
-    $scope.vm.model.nomeRichiedente = '';
-    $scope.vm.model.cognomeRichiedente = '';
+    $scope.model.id = '';
+    $scope.model.id_concessione = '';
+    $scope.model.importo_canone_richiesto = '';
 
     $scope.maxProgressBar = 1000;
     $scope.currentProgressBar = 0;
@@ -188,13 +190,44 @@ angular.module('myApp.controllers')
         docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
         return docDefinition;
       }
-      //,onRegisterApi: function( gridApi ) {
-      //  $scope.grid1Api = gridApi;
-      //}
     };
   
     $scope.gridOptions.multiSelect = true;
 
+
+    $scope.saveRow = function( rowEntity ) {
+        console.log('saveRow....');
+        // create a fake promise - normally you'd use the promise returned by $http or $resource
+        var promise = $q.defer();
+        $scope.gridApi.rowEdit.setSavePromise( rowEntity, promise.promise );
+        promise.resolve();
+        /*
+        PostaService.updatePosta(rowEntity)
+        .then(function (res) {
+            $log.debug(res);
+            promise.resolve();
+        })
+        .catch(function(response) {
+            promise.reject();
+            $log.debug(response);
+        });
+        */
+    };
+    
+    $scope.gridOptions.onRegisterApi = function( gridApi ) {
+      $scope.gridApi = gridApi;
+      gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
+      gridApi.selection.on.rowSelectionChanged($scope,function(row){
+          var msg = 'row selected ' + row.isSelected;
+          $log.log(row);
+          $log.log(msg);
+      });
+      gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
+          console.log('edited row id:' + rowEntity.id + ' Column:' + colDef.name + ' newValue:' + newValue + ' oldValue:' + oldValue);
+          $scope.$apply();
+      });
+
+    }
 
     // INIT caricamento dati grid
 
@@ -218,6 +251,27 @@ angular.module('myApp.controllers')
         $log.info('showDialog');
         AlertService.displayError('TEST');
     };
+
+    $scope.editData = function(){
+        $log.info('editData');
+        if ( $scope.gridApi.selection.getSelectedCount() == 1 ) {
+            $log.info($scope.gridApi.selection.getSelectedRows());
+
+            var row = $scope.gridApi.selection.getSelectedRows();
+
+            $scope.model.id = row[0].id;
+            $scope.model.id_concessione = row[0].ID_CONCESSIONE;
+            $scope.model.importo_canone_richiesto = row[0].IMPORTO_CANONE_RICHIESTO;
+
+            $scope.formStatus = "EditUpdate";
+        
+        } else {
+            $log.info('no Selection...');
+            $scope.errorMessage = 'Selezionare almeno un elemento della lista';
+        }
+    }
+
+    $scope.resetErrorMessage = function (){$scope.errorMessage = ''}
 
     /* Aggiungi anangrafica */
     $scope.addData = function(){
